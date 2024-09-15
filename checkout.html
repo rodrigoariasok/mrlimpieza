@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        .checkout-form {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .checkout-form input, .checkout-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .checkout-form button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .checkout-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Checkout</h1>
+        <div class="checkout-form">
+            <h2>Datos de Envío</h2>
+            <form id="checkout-form">
+                <label for="business-name">Razón Social:</label>
+                <input type="text" id="business-name" name="business-name" required>
+                
+                <label for="address">Dirección de Envío:</label>
+                <textarea id="address" name="address" rows="4" required></textarea>
+                
+                <input type="hidden" id="total-price" name="total-price">
+                
+                <button type="button" onclick="submitForm()">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function submitForm() {
+            const businessName = document.getElementById('business-name').value;
+            const address = document.getElementById('address').value;
+            const totalPrice = getQueryParameter('total');
+            
+            if (!businessName || !address || !totalPrice) {
+                alert('Por favor, complete todos los campos.');
+                return;
+            }
+            
+            const message = `Pedido Confirmado\nRazón Social: ${businessName}\nDirección de Envío: ${address}\nTotal: $${totalPrice}`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=2664212722&text=${encodedMessage}`;
+            
+            window.location.href = whatsappUrl;
+        }
+
+        // Inicializar el campo de precio total
+        document.getElementById('total-price').value = getQueryParameter('total');
+    </script>
+</body>
+</html>
