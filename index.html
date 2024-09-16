@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,21 +34,32 @@
             max-width: 150px;
             border-radius: 8px;
         }
+        .product h3 {
+            margin: 10px 0;
+        }
         .product input {
             width: 60px;
             text-align: center;
+            margin: 0 10px;
         }
         .product button {
             margin: 5px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             background-color: #28a745;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 14px;
         }
         .product button:hover {
             background-color: #218838;
+        }
+        .product button.add {
+            background-color: #007bff;
+        }
+        .product button.add:hover {
+            background-color: #0056b3;
         }
         .cart button {
             background-color: #007bff;
@@ -56,15 +68,23 @@
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
         .cart button:hover {
             background-color: #0056b3;
         }
         .cart-item {
-            margin: 5px 0;
+            margin: 10px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .cart-item input {
+            width: 60px;
+            text-align: center;
+            margin-right: 10px;
         }
         .cart-item button {
             background-color: #dc3545;
@@ -73,9 +93,19 @@
             padding: 5px 10px;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 14px;
         }
         .cart-item button:hover {
             background-color: #c82333;
+        }
+        .cart-item .item-details {
+            display: flex;
+            align-items: center;
+        }
+        .cart-item .item-details img {
+            max-width: 50px;
+            border-radius: 4px;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -118,10 +148,10 @@
                         <img src="${product.image}" alt="${product.name}">
                         <h3>${product.name}</h3>
                         <p>Precio: $${product.price}</p>
-                        <button onclick="changeQuantity(${product.id}, -1)">-</button>
+                        <button onclick="changeQuantity(${product.id}, -1)"><i class="fas fa-minus"></i></button>
                         <input type="number" id="quantity-${product.id}" value="1" min="1">
-                        <button onclick="changeQuantity(${product.id}, 1)">+</button>
-                        <button onclick="addToCart(${product.id})">Añadir al Carrito</button>
+                        <button onclick="changeQuantity(${product.id}, 1)"><i class="fas fa-plus"></i></button>
+                        <button class="add" onclick="addToCart(${product.id})"><i class="fas fa-cart-plus"></i> Añadir al Carrito</button>
                     </div>
                 `;
             });
@@ -173,9 +203,14 @@
             cart.forEach(item => {
                 cartItemsContainer.innerHTML += `
                     <div class="cart-item">
-                        ${item.product.name} - $${item.product.price} x 
-                        <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.product.id}, parseInt(this.value))">
-                        <button onclick="removeFromCart(${item.product.id})">Eliminar</button>
+                        <div class="item-details">
+                            <img src="${item.product.image}" alt="${item.product.name}">
+                            <div>
+                                ${item.product.name} - $${item.product.price} x 
+                                <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.product.id}, parseInt(this.value))">
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${item.product.id})"><i class="fas fa-trash-alt"></i> Eliminar</button>
                     </div>
                 `;
                 totalPrice += item.product.price * item.quantity;
