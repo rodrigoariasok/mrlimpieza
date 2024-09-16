@@ -81,12 +81,48 @@
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
         }
+        .cart-item .item-details {
+            display: flex;
+            align-items: center;
+        }
+        .cart-item img {
+            max-width: 50px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .cart-item .item-info {
+            display: flex;
+            flex-direction: column;
+        }
         .cart-item input {
             width: 60px;
             text-align: center;
-            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0 10px;
+            padding: 5px;
+            font-size: 14px;
         }
-        .cart-item button {
+        .cart-item .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+        .cart-item .quantity-controls button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .cart-item .quantity-controls button.decrement {
+            background-color: #dc3545;
+        }
+        .cart-item .quantity-controls button.decrement:hover {
+            background-color: #c82333;
+        }
+        .cart-item button.remove {
             background-color: #dc3545;
             border: none;
             color: #fff;
@@ -95,17 +131,8 @@
             cursor: pointer;
             font-size: 14px;
         }
-        .cart-item button:hover {
+        .cart-item button.remove:hover {
             background-color: #c82333;
-        }
-        .cart-item .item-details {
-            display: flex;
-            align-items: center;
-        }
-        .cart-item .item-details img {
-            max-width: 50px;
-            border-radius: 4px;
-            margin-right: 10px;
         }
     </style>
 </head>
@@ -205,12 +232,16 @@
                     <div class="cart-item">
                         <div class="item-details">
                             <img src="${item.product.image}" alt="${item.product.name}">
-                            <div>
-                                ${item.product.name} - $${item.product.price} x 
-                                <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.product.id}, parseInt(this.value))">
+                            <div class="item-info">
+                                ${item.product.name} - $${item.product.price}
+                                <div class="quantity-controls">
+                                    <button class="decrement" onclick="updateQuantity(${item.product.id}, ${item.quantity - 1})"><i class="fas fa-minus"></i></button>
+                                    <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.product.id}, parseInt(this.value))">
+                                    <button onclick="updateQuantity(${item.product.id}, ${item.quantity + 1})"><i class="fas fa-plus"></i></button>
+                                </div>
                             </div>
                         </div>
-                        <button onclick="removeFromCart(${item.product.id})"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                        <button class="remove" onclick="removeFromCart(${item.product.id})"><i class="fas fa-trash-alt"></i> Eliminar</button>
                     </div>
                 `;
                 totalPrice += item.product.price * item.quantity;
