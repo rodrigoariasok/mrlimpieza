@@ -63,6 +63,17 @@
         .cart-item {
             margin: 5px 0;
         }
+        .cart-item button {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .cart-item button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -134,6 +145,11 @@
             renderCart();
         }
 
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.product.id !== productId);
+            renderCart();
+        }
+
         function renderCart() {
             const cartItemsContainer = document.getElementById('cart-items');
             cartItemsContainer.innerHTML = '';
@@ -143,6 +159,7 @@
                 cartItemsContainer.innerHTML += `
                     <div class="cart-item">
                         ${item.product.name} - $${item.product.price} x ${item.quantity}
+                        <button onclick="removeFromCart(${item.product.id})">Eliminar</button>
                     </div>
                 `;
                 totalPrice += item.product.price * item.quantity;
